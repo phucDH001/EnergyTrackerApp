@@ -9,12 +9,12 @@ import {
 import React from 'react'
 import { useRouter } from 'expo-router'
 
-export default function SignIn() {
+export default function SignUp() {
   const route = useRouter()
 
   return (
     <View style={{ padding: 40 }}>
-      <Text style={{ fontSize: 30, fontWeight: 'bold' }}>Let's Sign In!</Text>
+      <Text style={{ fontSize: 30, fontWeight: 'bold' }}>Creat Account!</Text>
       <View
         style={{
           display: 'flex',
@@ -51,35 +51,30 @@ export default function SignIn() {
           style={styles.text_input}
         />
       </View>
+      <View style={{ marginTop: 20 }}>
+        <Text>Confirm Password</Text>
+        <TextInput
+          placeholder="Confirm Password"
+          secureTextEntry
+          style={styles.text_input}
+        />
+      </View>
       <TouchableOpacity style={styles.button}>
         <Text style={{ fontSize: 18, textAlign: 'center', color: 'white' }}>
           Submit
         </Text>
       </TouchableOpacity>
-      <Text style={{ fontSize: 18, marginTop: 20, textAlign: 'center' }}>
-        Or Login with
-      </Text>
-      <View style={styles.extend_login}>
-        <Image
-          source={require('../../assets/images/google-icon.png')}
-          style={{ width: 50, height: 50 }}
-        />
-        <Image
-          source={require('../../assets/images/facebook-icon.png')}
-          style={{ width: 33, height: 33 }}
-        />
-      </View>
       <Text style={{ fontSize: 18, textAlign: 'center', marginTop: 20 }}>
-        Don't have an account?{' '}
+        Already have an account?{' '}
         <Text
           style={{
             color: '#3894FF',
             fontWeight: 'bold',
             textDecorationLine: 'underline',
           }}
-          onPress={() => route.push('./signUp')}
+          onPress={() => route.push('./signIn')}
         >
-          Register Now
+          Login
         </Text>
       </Text>
     </View>
@@ -110,13 +105,5 @@ const styles = StyleSheet.create({
     padding: 10,
     borderRadius: 999,
     marginTop: 30,
-  },
-  extend_login: {
-    display: 'flex',
-    flexDirection: 'row',
-    justifyContent: 'center',
-    alignItems: 'center',
-    gap: 10,
-    marginTop: 8,
   },
 })
