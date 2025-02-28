@@ -2,9 +2,6 @@ import { View, Text } from 'react-native'
 import React from 'react'
 import { Tabs } from 'expo-router'
 import FontAwesome from '@expo/vector-icons/FontAwesome'
-import HomeScreen from './index'
-import AddNew from './AddNew'
-import Profile from './Profile'
 
 export default function TabLayout() {
   return (

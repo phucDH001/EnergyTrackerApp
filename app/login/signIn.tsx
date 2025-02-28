@@ -13,7 +13,7 @@ export default function SignIn() {
   const route = useRouter()
 
   return (
-    <View style={{ padding: 40 }}>
+    <View style={{ padding: 40, backgroundColor: 'white' }}>
       <Text style={{ fontSize: 30, fontWeight: 'bold' }}>Let's Sign In!</Text>
       <View
         style={{

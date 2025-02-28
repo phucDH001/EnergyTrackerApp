@@ -6,7 +6,7 @@ export default function LoginScreen() {
   const route = useRouter()
 
   return (
-    <View>
+    <View style={{ backgroundColor: 'white' }}>
       <View style={styles.image}>
         <Image
           source={require('../../assets/images/login.png')}
