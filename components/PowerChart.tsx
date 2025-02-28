@@ -1,6 +1,7 @@
 import { View, Text } from 'react-native'
 import React from 'react'
 import { BarChart } from 'react-native-gifted-charts'
+import { useRouter } from 'expo-router'
 
 const barData = [
   { value: 5.5, label: 'Mon' },
@@ -18,6 +19,8 @@ const getMaxValue = () => {
 }
 
 export default function PowerChart() {
+  const route = useRouter()
+
   return (
     <View
       style={{
@@ -63,6 +66,7 @@ export default function PowerChart() {
             textAlign: 'right',
             marginTop: 10,
           }}
+          onPress={() => route.push('/detail/PowerChartDetail')}
         >
           Show more
         </Text>

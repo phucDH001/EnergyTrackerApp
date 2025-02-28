@@ -32,7 +32,7 @@ const rooms = [
 ]
 
 export default function DeviceList() {
-  const [isCollapsed, setIsCollapsed] = useState(false)
+  const [isCollapsed, setIsCollapsed] = useState(true)
 
   return (
     <View style={{ margin: 10 }}>
@@ -59,6 +59,7 @@ export default function DeviceList() {
       </View>
       <Collapsible collapsed={isCollapsed}>
         <ScrollView
+          nestedScrollEnabled
           style={{
             marginTop: 10,
             height: 250,

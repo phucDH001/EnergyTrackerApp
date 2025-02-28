@@ -19,7 +19,7 @@ export default function Header() {
           KKKKK
         </Text>
       </View>
-      <Ionicons name="notifications" size={40} color="#FFD95F" />
+      <Ionicons name="notifications" size={40} color="#FFCC3F" />
     </View>
   )
 }

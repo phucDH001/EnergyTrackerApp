@@ -8,12 +8,14 @@ import {
 } from 'react-native'
 import React from 'react'
 import { useRouter } from 'expo-router'
+import { useAuth } from '../../config/AuthContext'
 
 export default function SignUp() {
   const route = useRouter()
+  const { isLogin, setIsLogin } = useAuth()
 
   return (
-    <View style={{ padding: 40, backgroundColor: 'white' }}>
+    <View style={{ height: '100%', padding: 40, backgroundColor: 'white' }}>
       <Text style={{ fontSize: 30, fontWeight: 'bold' }}>Creat Account!</Text>
       <View
         style={{
@@ -60,7 +62,13 @@ export default function SignUp() {
         />
       </View>
       <TouchableOpacity style={styles.button}>
-        <Text style={{ fontSize: 18, textAlign: 'center', color: 'white' }}>
+        <Text
+          style={{ fontSize: 18, textAlign: 'center', color: 'white' }}
+          onPress={() => {
+            setIsLogin(true)
+            route.push('/(tabs)')
+          }}
+        >
           Submit
         </Text>
       </TouchableOpacity>
