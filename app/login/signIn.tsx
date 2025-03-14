@@ -5,14 +5,60 @@ import {
   StyleSheet,
   TextInput,
   TouchableOpacity,
+  ActivityIndicator,
 } from 'react-native'
-import React from 'react'
+import React, { useState, useContext } from 'react'
 import { useRouter } from 'expo-router'
-import { useAuth } from '../../config/AuthContext'
+import { AuthContext } from '../../context/auth'
 
 export default function SignIn() {
+  const authContextValue = useContext(AuthContext)
+
+  if (!authContextValue) {
+    // Xử lý trường hợp Context Value là undefined (AuthProvider có thể bị thiếu)
+    console.error('AuthContext.Provider is missing!')
+    return (
+      <View>
+        <Text>Lỗi: Thiếu AuthContext Provider</Text>
+      </View>
+    ) // Hoặc render UI fallback
+  }
+
   const route = useRouter()
-  const { isLogin, setIsLogin } = useAuth()
+  // const { isLogin, setIsLogin } = useAuth()
+  const { login, isLoading } = authContextValue
+  const [username, setUsername] = useState('')
+  const [password, setPassword] = useState('')
+  const [error, setError] = useState('')
+
+  const handleLogin = async () => {
+    setError('')
+    try {
+      // **Thay thế bằng endpoint API đăng nhập thực tế của bạn**
+      const response = await fetch('http://192.168.1.2:5000/auth/login', {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json',
+        },
+        body: JSON.stringify({ username, password }),
+      })
+
+      if (!response.ok) {
+        const errorData = await response.json()
+        throw new Error(errorData.message || 'Login failed')
+      }
+
+      const data = await response.json()
+      const token = data.user.Username
+      const userData = data.user
+
+      await login(token, userData) // Gọi hàm login từ AuthContext
+    } catch (e: any) {
+      // need a specific type
+      setError(e.message)
+      console.error('Login error:', e)
+    }
+  }
 
   return (
     <View style={{ height: '100%', padding: 40, backgroundColor: 'white' }}>
@@ -43,27 +89,41 @@ export default function SignIn() {
       </Text>
       <View style={{ marginTop: 20 }}>
         <Text>Username</Text>
-        <TextInput placeholder="Username" style={styles.text_input} />
+        <TextInput
+          placeholder="Username"
+          style={styles.text_input}
+          value={username}
+          onChangeText={setUsername}
+        />
       </View>
       <View style={{ marginTop: 20 }}>
         <Text>Password</Text>
         <TextInput
           placeholder="Password"
+          value={password}
+          onChangeText={setPassword}
           secureTextEntry
           style={styles.text_input}
         />
       </View>
-      <TouchableOpacity style={styles.button}>
-        <Text
-          style={{ fontSize: 18, textAlign: 'center', color: 'white' }}
-          onPress={() => {
-            setIsLogin(true)
-            route.push('/(tabs)')
-          }}
-        >
-          Submit
-        </Text>
-      </TouchableOpacity>
+      {isLoading ? (
+        <ActivityIndicator size="large" color="#0000ff" />
+      ) : (
+        <TouchableOpacity style={styles.button}>
+          <View>
+            <Text
+              style={{ fontSize: 18, textAlign: 'center', color: 'white' }}
+              onPress={() => {
+                // setIsLogin(true)
+                // route.push('/(tabs)')
+                handleLogin()
+              }}
+            >
+              Submit
+            </Text>
+          </View>
+        </TouchableOpacity>
+      )}
       <Text style={{ fontSize: 18, marginTop: 20, textAlign: 'center' }}>
         Or Login with
       </Text>

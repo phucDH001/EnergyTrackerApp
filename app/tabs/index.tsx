@@ -6,14 +6,14 @@ import PowerChart from '@/components/PowerChart'
 import DeviceList from '@/components/DeviceList'
 import QuickActions from '@/components/QuickActions'
 import RunningStatus from '@/components/RunningStatus'
-import { useAuth } from '../../config/AuthContext'
+// import { useAuth } from '../../config/AuthContext'
 
 export default function HomeScreen() {
-  const { isLogin, setIsLogin } = useAuth()
+  // const { isLogin, setIsLogin } = useAuth()
 
-  if (!isLogin) {
-    return <Redirect href={'./login'} />
-  }
+  // if (!isLogin) {
+  //   return <Redirect href={'./login'} />
+  // }
 
   return (
     <ScrollView style={{ backgroundColor: 'white' }}>

@@ -6,13 +6,13 @@ import {
   TextInput,
   TouchableOpacity,
 } from 'react-native'
-import React from 'react'
+import React, {useContext} from 'react'
 import { useRouter } from 'expo-router'
-import { useAuth } from '../../config/AuthContext'
+import { AuthContext } from '../../context/auth'
 
 export default function SignUp() {
   const route = useRouter()
-  const { isLogin, setIsLogin } = useAuth()
+  // const { isLogin, setIsLogin } = useContext(AuthContext)
 
   return (
     <View style={{ height: '100%', padding: 40, backgroundColor: 'white' }}>
@@ -65,8 +65,8 @@ export default function SignUp() {
         <Text
           style={{ fontSize: 18, textAlign: 'center', color: 'white' }}
           onPress={() => {
-            setIsLogin(true)
-            route.push('/(tabs)')
+            // setIsLogin(true)
+            route.push('/tabs')
           }}
         >
           Submit

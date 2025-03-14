@@ -39,16 +39,18 @@ export default function LoginScreen() {
           style={styles.button}
           onPress={() => route.push('./login/signIn')}
         >
-          <Text
-            style={{
-              fontSize: 20,
-              fontWeight: 'bold',
-              textAlign: 'center',
-              color: '#3894FF',
-            }}
-          >
-            Continue
-          </Text>
+          <View>
+            <Text
+              style={{
+                fontSize: 20,
+                fontWeight: 'bold',
+                textAlign: 'center',
+                color: '#3894FF',
+              }}
+            >
+              Continue
+            </Text>
+          </View>
         </TouchableOpacity>
         <Text style={{ color: 'white', marginTop: 10 }}>
           Note: By clicking Continue, you will agree to our terms and

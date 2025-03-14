@@ -3,31 +3,31 @@ import React from 'react'
 import { Tabs } from 'expo-router'
 import FontAwesome from '@expo/vector-icons/FontAwesome'
 
-export default function TabLayout() {
+export default function LoginLayout() {
   return (
     <Tabs screenOptions={{ headerShown: false }}>
       <Tabs.Screen
         name="index"
         options={{
-          title: 'Home',
+          title: 'onboarding',
           tabBarIcon: ({ color, size }) => (
             <FontAwesome name="home" size={size} color={color} />
           ),
         }}
       />
       <Tabs.Screen
-        name="AddNew"
+        name="signIn"
         options={{
-          title: 'Add New',
+          title: 'sign in',
           tabBarIcon: ({ color, size }) => (
             <FontAwesome name="plus-circle" size={size} color={color} />
           ),
         }}
       />
       <Tabs.Screen
-        name="Profile"
+        name="signUp"
         options={{
-          title: 'Profile',
+          title: 'sign up',
           tabBarIcon: ({ color, size }) => (
             <FontAwesome name="user-circle" size={size} color={color} />
           ),

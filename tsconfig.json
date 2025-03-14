@@ -11,9 +11,9 @@
     "**/*.tsx",
     ".expo/types/**/*.ts",
     "expo-env.d.ts",
-    "app/(tabs)/Profile.tsx",
-    "app/(tabs)/index.tsx",
-    "app/(tabs)/AddNew.tsx",
-    "app/(tabs)/_layout.tsx"
+    "app/tabs/Profile.tsx",
+    "app/tabs/index.tsx",
+    "app/tabs/AddNew.tsx",
+    "app/tabs/_layout.tsx"
   ]
 }
