@@ -4,6 +4,8 @@ import FontAwesome5 from '@expo/vector-icons/FontAwesome5'
 import Ionicons from '@expo/vector-icons/Ionicons'
 import Fontisto from '@expo/vector-icons/Fontisto'
 import MaterialCommunityIcons from '@expo/vector-icons/MaterialCommunityIcons'
+import DetailButton from './detailButton'
+import { Href } from 'expo-router'
 
 export default function QuickActions() {
   return (
@@ -17,18 +19,7 @@ export default function QuickActions() {
         }}
       >
         <Text style={{ fontSize: 20, fontWeight: 'bold' }}>Quick Actions</Text>
-        <TouchableOpacity
-          style={{
-            height: 25,
-            width: 50,
-            backgroundColor: '#73E568',
-            borderRadius: 5,
-            justifyContent: 'center',
-            alignItems: 'center',
-          }}
-        >
-          <Text style={{ fontSize: 15 }}>detail</Text>
-        </TouchableOpacity>
+        <DetailButton directory={'/device/test' as Href} />
       </View>
       <View
         style={{

@@ -52,6 +52,9 @@ export default function SignIn() {
       const token = data.user.Username
       const userData = data.user
 
+      console.log(token)
+      console.log(userData)
+
       await login(token, userData) // Gọi hàm login từ AuthContext
     } catch (e: any) {
       // need a specific type
