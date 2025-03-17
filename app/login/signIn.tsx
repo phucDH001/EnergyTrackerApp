@@ -10,6 +10,8 @@ import {
 import React, { useState, useContext } from 'react'
 import { useRouter } from 'expo-router'
 import { AuthContext } from '../../context/auth'
+import { loginAPI } from '@/services/auth'
+import { UserDataSaved } from '@/types/userdata'
 
 export default function SignIn() {
   const authContextValue = useContext(AuthContext)
@@ -34,23 +36,9 @@ export default function SignIn() {
   const handleLogin = async () => {
     setError('')
     try {
-      // **Thay thế bằng endpoint API đăng nhập thực tế của bạn**
-      const response = await fetch('http://192.168.1.2:5000/auth/login', {
-        method: 'POST',
-        headers: {
-          'Content-Type': 'application/json',
-        },
-        body: JSON.stringify({ username, password }),
-      })
-
-      if (!response.ok) {
-        const errorData = await response.json()
-        throw new Error(errorData.message || 'Login failed')
-      }
-
-      const data = await response.json()
-      const token = data.user.Username
-      const userData = data.user
+      const data = await loginAPI({ username, password })
+      const token: string = data.token
+      const userData: UserDataSaved = data.userData
 
       console.log(token)
       console.log(userData)

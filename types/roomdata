@@ -1,0 +1,16 @@
+export interface RoomData {
+  room: Room[]
+}
+
+export interface Room {
+  name: string
+  id: number
+  device: Device[]
+}
+
+export interface Device {
+  name: string
+  id: number
+  key: string
+  status: boolean
+}
