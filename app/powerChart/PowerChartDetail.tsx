@@ -10,6 +10,7 @@ import { BarChart } from 'react-native-gifted-charts'
 import SelectDropdown from 'react-native-select-dropdown'
 import Entypo from '@expo/vector-icons/Entypo'
 import { useRouter } from 'expo-router'
+import Header from '@/components/Header'
 
 const options = ['Days', 'Months', 'Years']
 
@@ -29,16 +30,10 @@ const StatsScreen = () => {
 
   return (
     <ScrollView style={styles.container}>
-      <TouchableOpacity
-        style={{ marginBottom: 10 }}
-        onPress={() => route.back()}
-      >
-        <Entypo name="chevron-left" size={28} color="#3894FF" />
-      </TouchableOpacity>
+      <Header title="Stats" />
+
       {/* Header */}
       <View style={styles.headerContainer}>
-        <Text style={styles.header}>Stats</Text>
-
         <View style={styles.subHeader}>
           <Text style={styles.filterText}>All devices</Text>
           <SelectDropdown
@@ -129,7 +124,6 @@ const styles = StyleSheet.create({
     flex: 1,
     backgroundColor: '#fff',
     paddingHorizontal: 16,
-    paddingTop: 20,
   },
   headerContainer: {
     alignItems: 'flex-start',

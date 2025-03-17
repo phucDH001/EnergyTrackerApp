@@ -1,6 +1,6 @@
 import { Stack, useRouter } from 'expo-router'
 import { AuthProvider, AuthContext } from '../context/auth'
-import { useContext, useEffect } from 'react'
+import React, { useContext, useEffect } from 'react'
 import { View, Text } from 'react-native'
 
 export default function RootLayout() {
@@ -11,7 +11,7 @@ export default function RootLayout() {
   )
 }
 
-const RootLayoutNavigator = () => {
+const RootLayoutNavigator: React.FC = () => {
   const authContextValue = useContext(AuthContext)
 
   if (!authContextValue) {

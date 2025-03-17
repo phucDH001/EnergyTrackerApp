@@ -66,7 +66,7 @@ export default function PowerChart() {
             textAlign: 'right',
             marginTop: 10,
           }}
-          onPress={() => route.push('/detail/PowerChartDetail')}
+          onPress={() => route.push('/powerChart/PowerChartDetail')}
         >
           Show more
         </Text>

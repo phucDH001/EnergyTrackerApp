@@ -32,8 +32,7 @@ export default function LoginScreen() {
             marginTop: 20,
           }}
         >
-          Monitor appliances and auto-control devices when consumption exceeds
-          limits.
+          Monitor appliances and auto-control devices when consumption exceeds limits.
         </Text>
         <TouchableOpacity
           style={styles.button}
@@ -52,10 +51,11 @@ export default function LoginScreen() {
             </Text>
           </View>
         </TouchableOpacity>
-        <Text style={{ color: 'white', marginTop: 10 }}>
-          Note: By clicking Continue, you will agree to our terms and
-          conditions.
-        </Text>
+        <View>
+          <Text style={{ color: 'white', marginTop: 10 }}>
+            Note: By clicking Continue, you will agree to our terms and conditions.
+          </Text>
+        </View>
       </View>
     </View>
   )

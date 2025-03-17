@@ -1,11 +1,11 @@
 import { View, Text, ScrollView, StyleSheet } from 'react-native'
 import React from 'react'
 import { Redirect } from 'expo-router'
-import Header from '@/components/Header'
-import PowerChart from '@/components/PowerChart'
-import DeviceList from '@/components/DeviceList'
-import QuickActions from '@/components/QuickActions'
-import RunningStatus from '@/components/RunningStatus'
+import Header from '@/components/home/HeaderHome'
+import PowerChart from '@/components/home/PowerChart'
+import DeviceList from '@/components/home/DeviceList'
+import QuickActions from '@/components/home/QuickActions'
+import RunningStatus from '@/components/home/RunningStatus'
 // import { useAuth } from '../../config/AuthContext'
 
 export default function HomeScreen() {

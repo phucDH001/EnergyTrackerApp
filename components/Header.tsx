@@ -1,25 +1,34 @@
-import { View, Text } from 'react-native'
 import React from 'react'
-import Ionicons from '@expo/vector-icons/Ionicons'
+import { View, Text, TouchableOpacity, StyleSheet } from 'react-native'
+import Entypo from '@expo/vector-icons/Entypo'
+import { useRouter } from 'expo-router'
 
-export default function Header() {
+const Header: React.FC<{title: string}> = ({title}) => {
+  const route = useRouter()
   return (
-    <View
-      style={{
-        flexDirection: 'row',
-        justifyContent: 'space-between',
-        alignItems: 'center',
-        marginHorizontal: 20,
-        marginVertical: 10,
-      }}
-    >
-      <View style={{}}>
-        <Text style={{ fontSize: 25, color: '#3894FF' }}>Welcome</Text>
-        <Text style={{ fontSize: 30, fontWeight: 'bold', color: '#3894FF' }}>
-          KKKKK
-        </Text>
+    <View style={styles.header}>
+      <TouchableOpacity onPress={() => route.back()}>
+        <Entypo name="chevron-left" size={28} color="#3894FF" />
+      </TouchableOpacity>
+
+      <View>
+        <Text style={styles.headerText}>{title}</Text>
       </View>
-      <Ionicons name="notifications" size={40} color="#FFCC3F" />
     </View>
   )
 }
+
+export default Header
+
+const styles = StyleSheet.create({
+  header: {
+    flexDirection: 'row',
+    gap: 15,
+    alignItems: 'center',
+    paddingTop: 20,
+  },
+  headerText: {
+    fontSize: 24,
+    fontWeight: 'bold',
+  },
+})
