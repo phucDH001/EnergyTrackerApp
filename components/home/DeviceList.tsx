@@ -3,8 +3,8 @@ import React, { useState } from 'react'
 import Collapsible from 'react-native-collapsible'
 import FontAwesome from '@expo/vector-icons/FontAwesome'
 import { useRouter } from 'expo-router'
-import DetailButton from './detailButton'
-import StatusSwitch from './statusSwitch'
+import DetailButton from '../detailButton'
+import StatusSwitch from '../statusSwitch'
 import { Href } from 'expo-router'
 
 const rooms = [
@@ -83,7 +83,7 @@ export default function DeviceList() {
               </View>
             </TouchableOpacity>
           </View>
-          <DetailButton directory={'/device' as Href} />
+          <DetailButton directory={'/device/deviceList' as Href} />
         </View>
       </View>
       <Collapsible collapsed={isCollapsed}>

@@ -2,14 +2,13 @@ import {
   View,
   Text,
   ScrollView,
-  TouchableOpacity,
   StyleSheet,
   Switch,
 } from 'react-native'
 import React from 'react'
-import Entypo from '@expo/vector-icons/Entypo'
 import { useRouter } from 'expo-router'
 import DetailButton from '@/components/detailButton'
+import Header from '@/components/Header'
 
 const sample_data = [
   {
@@ -65,22 +64,10 @@ export default function DeviceList() {
   return (
     <ScrollView style={styles.container}>
       {/* header */}
-      <View style={styles.header}>
-        <TouchableOpacity onPress={() => route.back()}>
-          <Entypo name="chevron-left" size={28} color="#3894FF" />
-        </TouchableOpacity>
-
-        <View>
-          <Text style={styles.headerText}>Device List</Text>
-        </View>
-
-        <TouchableOpacity onPress={() => route.push('./test')}>
-          <Entypo name="chevron-left" size={28} color="#3894FF" />
-        </TouchableOpacity>
-      </View>
+      <Header title={'Device List'}/>
 
       <View style={styles.subHeader}>
-        <Text style={[styles.headerText, { color: 'black', opacity: 0.6 }]}>
+        <Text style={[styles.subHeaderText, { color: 'black', opacity: 0.6 }]}>
           Manual control
         </Text>
       </View>
@@ -118,22 +105,16 @@ const styles = StyleSheet.create({
     backgroundColor: '#fff',
     paddingHorizontal: 16,
   },
-  header: {
-    flexDirection: 'row',
-    gap: 15,
-    alignItems: 'center',
-    paddingTop: 20,
-  },
-  headerText: {
-    fontSize: 24,
-    fontWeight: 'bold',
-  },
   subHeader: {
     flexDirection: 'row',
     justifyContent: 'center',
     alignItems: 'center',
     width: '100%',
     paddingVertical: 20,
+  },
+  subHeaderText: {
+    fontSize: 24,
+    fontWeight: 'bold',
   },
   roomContainer: {
     marginVertical: 10,

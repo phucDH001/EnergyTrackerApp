@@ -4,7 +4,7 @@ import FontAwesome5 from '@expo/vector-icons/FontAwesome5'
 import Ionicons from '@expo/vector-icons/Ionicons'
 import Fontisto from '@expo/vector-icons/Fontisto'
 import MaterialCommunityIcons from '@expo/vector-icons/MaterialCommunityIcons'
-import DetailButton from './detailButton'
+import DetailButton from '../detailButton'
 import { Href } from 'expo-router'
 
 export default function QuickActions() {
