@@ -19,7 +19,7 @@ const RootLayoutNavigator: React.FC = () => {
     console.error('AuthContext.Provider is missing!')
     return (
       <View>
-        <Text>Lỗi: Thiếu AuthContext Provider</Text>
+        <Text>Lỗi: Thiếu AuthContext Provider </Text>
       </View>
     ) // Hoặc render UI fallback
   }
