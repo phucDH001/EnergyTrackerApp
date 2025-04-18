@@ -3,12 +3,15 @@ import { useRouter } from 'expo-router'
 import { Href } from 'expo-router'
 import React from 'react'
 
-const DetailButton: React.FC<{directory: Href}> = ( {directory} ) => {
+const DetailButton: React.FC<{directory: Href, params: any}> = ( {directory, params} ) => {
   const route = useRouter()
   return (
     <TouchableOpacity
       style={styles.detailButton}
-      onPress={() => route.push(directory)}
+      onPress={() => route.push({
+        pathname: directory,
+        params: params,
+      })}
     >
       <Text style={styles.detailButtonText}>detail</Text>
     </TouchableOpacity>
