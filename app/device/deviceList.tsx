@@ -7,8 +7,8 @@ import {
 } from 'react-native'
 import React from 'react'
 import { useRouter } from 'expo-router'
-import DetailButton from '@/components/detailButton'
 import Header from '@/components/Header'
+import Room from '@/components/device/room'
 
 const sample_data = [
   {
@@ -74,26 +74,7 @@ export default function DeviceList() {
 
       {/* room */}
       {sample_data.map((room, index) => (
-        <View key={room.id} style={styles.roomContainer}>
-          <View style={styles.roomHeader}>
-            <Text style={styles.roomName}>{room.name}</Text>
-            <DetailButton directory={'./test'} />
-          </View>
-          <View style={styles.divider} />
-          <View style={styles.roomDevice}>
-            {room.devices.map((device) => (
-              <View key={device.id} style={styles.deviceContainer}>
-                <Text style={styles.deviceName}>{device.name}</Text>
-                <Switch
-                  value={device.status}
-                  onValueChange={() => {console.log('change')}}
-                  thumbColor={device.status ? '#3894FF' : '#f4f3f4'}
-                  trackColor={{ false: '#767577', true: '#81b0ff' }}
-                />
-              </View>
-            ))}
-          </View>
-        </View>
+        <Room key={index} room={room} />
       ))}
     </ScrollView>
   )
@@ -115,50 +96,5 @@ const styles = StyleSheet.create({
   subHeaderText: {
     fontSize: 24,
     fontWeight: 'bold',
-  },
-  roomContainer: {
-    marginVertical: 10,
-    padding: 10,
-    borderWidth: 1,
-    borderColor: '#ddd',
-    borderRadius: 8,
-    flexDirection: 'row',
-  },
-  roomHeader: {
-    gap: 15,
-    alignItems: 'center',
-    paddingVertical: 10,
-    flex: 3,
-  },
-  divider: {
-    width: 1,
-    backgroundColor: '#ddd',
-    marginHorizontal: 10,
-  },
-  roomDevice: {
-    flex: 5,
-    gap: 0,
-  },
-  roomName: {
-    fontSize: 18,
-    fontWeight: 'bold',
-  },
-  detailButton: {
-    backgroundColor: '#32CD32',
-    paddingVertical: 5,
-    paddingHorizontal: 10,
-    borderRadius: 5,
-  },
-  detailButtonText: {
-    color: '#fff',
-    fontWeight: 'bold',
-  },
-  deviceContainer: {
-    flexDirection: 'row',
-    justifyContent: 'space-between',
-    alignItems: 'center',
-  },
-  deviceName: {
-    fontSize: 16,
   },
 })
