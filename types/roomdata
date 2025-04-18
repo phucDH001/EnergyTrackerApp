@@ -11,6 +11,5 @@ export interface Room {
 export interface Device {
   name: string
   id: number
-  key: string
   status: boolean
 }

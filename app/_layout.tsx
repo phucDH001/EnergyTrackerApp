@@ -1,4 +1,4 @@
-import { Stack, useRouter } from 'expo-router'
+import { Slot, Stack, useRouter } from 'expo-router'
 import { AuthProvider, AuthContext } from '../context/auth'
 import React, { useContext, useEffect } from 'react'
 import { View, Text } from 'react-native'
