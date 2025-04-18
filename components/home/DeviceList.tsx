@@ -83,7 +83,7 @@ export default function DeviceList() {
               </View>
             </TouchableOpacity>
           </View>
-          <DetailButton directory={'/device/deviceList' as Href} />
+          <DetailButton directory={'/device/deviceList' as Href} params={null} />
         </View>
       </View>
       <Collapsible collapsed={isCollapsed}>

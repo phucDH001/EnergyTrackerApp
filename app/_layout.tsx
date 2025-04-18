@@ -24,25 +24,27 @@ const RootLayoutNavigator: React.FC = () => {
     ) // Hoặc render UI fallback
   }
 
-  const { userToken } = authContextValue
+  const { isLoading, userToken } = authContextValue
 
   const router = useRouter()
 
   useEffect(() => {
-    if (userToken == null) {
-      // Nếu không có token và không phải đang loading, điều hướng đến trang đăng nhập
-      if (router.canDismiss()) {
-        router.dismissAll();
+    if (!isLoading) {
+      if (userToken == null) {
+        // Nếu không có token và không phải đang loading, điều hướng đến trang đăng nhập
+        if (router.canDismiss()) {
+          router.dismissAll()
+        }
+        router.replace('/login') // Điều hướng đến màn hình đăng nhập (app/login/index.tsx hoặc app/login.tsx)
+      } else {
+        // Nếu có token và không phải đang loading, điều hướng đến trang chủ
+        if (router.canDismiss()) {
+          router.dismissAll()
+        }
+        router.replace(`/tabs`) // Điều hướng đến nhóm tab (app/(tabs)/index.tsx) - hoặc '/index' nếu muốn đến app/index.tsx
       }
-      router.replace('/login'); // Điều hướng đến màn hình đăng nhập (app/login/index.tsx hoặc app/login.tsx)
-    } else {
-      // Nếu có token và không phải đang loading, điều hướng đến trang chủ
-      if (router.canDismiss()) {
-        router.dismissAll();
-      }
-      router.replace(`/tabs`); // Điều hướng đến nhóm tab (app/(tabs)/index.tsx) - hoặc '/index' nếu muốn đến app/index.tsx
     }
-  }, [userToken])
+  }, [isLoading, userToken])
 
   return (
     <Stack screenOptions={{ headerShown: false }}>

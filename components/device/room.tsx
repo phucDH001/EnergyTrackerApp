@@ -8,7 +8,7 @@ const Room: React.FC = ({ room }) => {
     <View key={room.id} style={styles.roomContainer}>
       <View style={styles.roomHeader}>
         <Text style={styles.roomName}>{room.name}</Text>
-        <DetailButton directory={'./test'} />
+        <DetailButton directory={'./deviceConfig'} />
       </View>
       <View style={styles.divider} />
       <View style={styles.roomDevice}>

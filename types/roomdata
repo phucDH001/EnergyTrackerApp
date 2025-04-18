@@ -12,4 +12,6 @@ export interface Device {
   name: string
   id: number
   status: boolean
+  turnOnTime?: string
+  turnOffTime?: string
 }
