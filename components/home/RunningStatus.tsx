@@ -1,6 +1,7 @@
 import { View, Text, StyleSheet, TouchableOpacity } from 'react-native'
 import React from 'react'
 import MaterialIcons from '@expo/vector-icons/MaterialIcons'
+import { Room } from '@/types/roomdata'
 
 interface RoomStatusCardProps {
   title: string
@@ -8,6 +9,8 @@ interface RoomStatusCardProps {
   inactive: number
   bgColor: string
 }
+
+const colors = ['#FFCC3F', '#1AB44F', '#3894FF', '#FF7B1C']
 
 const RoomStatusCard: React.FC<RoomStatusCardProps> = ({
   title,
@@ -33,37 +36,23 @@ const RoomStatusCard: React.FC<RoomStatusCardProps> = ({
   )
 }
 
-export default function RunningStaus() {
+export default function RunningStaus({ rooms }: { rooms: Room[] }) {
   return (
     <View>
       <Text style={{ fontSize: 20, fontWeight: 'bold', marginLeft: 20 }}>
         Running Status
       </Text>
       <View style={styles.container}>
-        <RoomStatusCard
-          title="Living Room"
-          active={2}
-          inactive={3}
-          bgColor="#FFCC3F"
-        />
-        <RoomStatusCard
-          title="Bed Room"
-          active={1}
-          inactive={2}
-          bgColor="#1AB44F"
-        />
-        <RoomStatusCard
-          title="Kitchen"
-          active={2}
-          inactive={4}
-          bgColor="#3894FF"
-        />
-        <RoomStatusCard
-          title="Store Room"
-          active={1}
-          inactive={3}
-          bgColor="#FF7B1C"
-        />
+        {/* Map through the rooms and create a card for each room */ }
+        {rooms.map((room, index) => (
+          <RoomStatusCard
+            key={index}
+            title={room.room_name}
+            active={room.devices?.filter(device => device.status === 'On').length || 0}
+            inactive={room.devices?.filter(device => device.status === 'Off').length || 0}
+            bgColor={colors[index % colors.length]}
+          />
+        ))}
       </View>
     </View>
   )

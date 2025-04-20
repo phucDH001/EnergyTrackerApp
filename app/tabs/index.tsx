@@ -1,12 +1,11 @@
 import { View, Text, ScrollView, StyleSheet } from 'react-native'
-import React from 'react'
-import { Redirect } from 'expo-router'
+import React, { useContext, useMemo } from 'react'
 import Header from '@/components/home/HeaderHome'
 import PowerChart from '@/components/home/PowerChart'
 import DeviceList from '@/components/home/DeviceList'
 import QuickActions from '@/components/home/QuickActions'
 import RunningStatus from '@/components/home/RunningStatus'
-// import { useAuth } from '../../config/AuthContext'
+import { AuthContext } from '@/context/auth'
 
 export default function HomeScreen() {
   // const { isLogin, setIsLogin } = useAuth()
@@ -15,15 +14,24 @@ export default function HomeScreen() {
   //   return <Redirect href={'./login'} />
   // }
 
+  const authContextValue = useContext(AuthContext)
+  const { userInfo, rooms } = authContextValue
+
+  // Use flatMap to gather all devices into a single array
+  const allDevices = useMemo(() => {
+    if (!rooms) return []
+    return rooms.flatMap((room) => room.devices || [])
+  }, [rooms])
+
   return (
     <ScrollView style={{ backgroundColor: 'white' }}>
-      <Header />
+      <Header username={userInfo?.UserName} />
       <PowerChart />
-      <DeviceList />
+      <DeviceList deviceList={allDevices} />
       <View style={styles.separate}></View>
       <QuickActions />
       <View style={styles.separate}></View>
-      <RunningStatus />
+      <RunningStatus rooms={rooms} />
     </ScrollView>
   )
 }

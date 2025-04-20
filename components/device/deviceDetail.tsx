@@ -2,22 +2,29 @@ import { View, Text, StyleSheet, TouchableOpacity } from 'react-native'
 import DetailButton from '../detailButton'
 import StatusSwitch from '../statusSwitch'
 
+import { Device } from '@/types/roomdata'
+
 import React, { useState } from 'react'
 
-const DeviceDetail = ({ device, index }) => {
+interface DeviceDetailProps {
+  device: Device
+  index: number
+}
+
+const DeviceDetail = ({ device, index } : DeviceDetailProps) => {
   const [isLoadingTurnOnOff, setIsLoadingTurnOnOff] = useState(false)
 
   return (
     <View key={index} style={styles.deviceContainer}>
       <View style={styles.roomHeader}>
-        <Text style={styles.roomName}>{device.name}</Text>
+        <Text style={styles.roomName}>{device.device_name}</Text>
         <DetailButton directory={'./deviceConsumption'} params={device} />
       </View>
       <View style={styles.divider} />
       <View style={styles.roomDevice}>
         <View style={styles.alignTextRow}>
           <Text style={styles.fieldName}>On/Off</Text>
-          <StatusSwitch status={device.status} />
+          <StatusSwitch status={device.status == 'On'} />
         </View>
         <View style={styles.alignTextRow}>
           <Text style={styles.fieldName}>Turn on time</Text>

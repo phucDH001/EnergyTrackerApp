@@ -2,7 +2,7 @@ import { View, Text } from 'react-native'
 import React from 'react'
 import Ionicons from '@expo/vector-icons/Ionicons'
 
-export default function Header() {
+export default function Header({username}: { username: string | undefined }) {
   return (
     <View
       style={{
@@ -16,7 +16,7 @@ export default function Header() {
       <View style={{}}>
         <Text style={{ fontSize: 25, color: '#3894FF' }}>Welcome</Text>
         <Text style={{ fontSize: 30, fontWeight: 'bold', color: '#3894FF' }}>
-          KKKKK
+          {username}
         </Text>
       </View>
       <Ionicons name="notifications" size={40} color="#FFCC3F" />
