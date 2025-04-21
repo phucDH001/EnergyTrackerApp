@@ -2,13 +2,14 @@ import React from 'react'
 import { View, Text, StyleSheet } from 'react-native'
 import DetailButton from '@/components/detailButton'
 import DeviceOnOff from './deviceOnOff'
+import { Room as RoomType } from '@/types/roomdata'
 
-const Room: React.FC = ({ room }) => {
+const Room: React.FC<{ room: RoomType }> = ({ room } ) => {
   return (
-    <View key={room.id} style={styles.roomContainer}>
+    <View key={room.room_id} style={styles.roomContainer}>
       <View style={styles.roomHeader}>
-        <Text style={styles.roomName}>{room.name}</Text>
-        <DetailButton directory={'./deviceConfig'} />
+        <Text style={styles.roomName}>{room.room_name}</Text>
+        <DetailButton directory={'./deviceConfig'} params={{room_id: room.room_id}}/>
       </View>
       <View style={styles.divider} />
       <View style={styles.roomDevice}>

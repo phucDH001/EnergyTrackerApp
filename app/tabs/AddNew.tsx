@@ -1,323 +1,178 @@
-import {
-  View,
-  Text,
-  TextInput,
-  StyleSheet,
+import React, { useState, useEffect, useContext } from 'react';
+import { AuthContext } from '@/context/auth';
+import { 
+  View, 
+  Text, 
+  StyleSheet, 
+  ActivityIndicator, 
+  FlatList, 
   TouchableOpacity,
-  Modal,
-} from 'react-native'
-import React, { useState, useCallback } from 'react'
-import { Dropdown } from 'react-native-element-dropdown'
-import Collapsible from 'react-native-collapsible'
+  SafeAreaView
+} from 'react-native';
+import { useRouter } from 'expo-router';
+import { getAllDevicesAPI } from '@/services/allDevice';
+import Header from '@/components/Header';
+import { Device } from '@/types/roomdata';
 
-const data = [
-  { label: 'Living Room', value: 'living-room' },
-  { label: 'Main Bedroom', value: 'main-bedroom' },
-  { label: 'Kitchen', value: 'kitchen' },
-  { label: 'Garage', value: 'garage' },
-  { label: 'Secondary Bedroom', value: 'secondary-bedroom' },
-]
+export default function AddNew() {
+  const authContextValue = useContext(AuthContext);
+  const { userToken } = authContextValue;
+  const [devices, setDevices] = useState<Device[]>([]);
+  const [loading, setLoading] = useState<boolean>(true);
+  const [error, setError] = useState<string | null>(null);
+  const router = useRouter();
 
-interface RadioButtonProps {
-  title: string
-  status: string
-  onPress: (title: string) => void
-}
+  useEffect(() => {
+    fetchDevices();
+  }, []);
 
-const RadioButon: React.FC<RadioButtonProps> = React.memo(
-  ({ title, status, onPress }) => {
-    return (
-      <View style={{ flexDirection: 'row', alignItems: 'center', gap: 7 }}>
-        <TouchableOpacity
-          style={{
-            height: 22,
-            width: 22,
-            borderRadius: 999,
-            borderWidth: 1.5,
-            borderColor: '#3894FF',
-            alignItems: 'center',
-            justifyContent: 'center',
-          }}
-          onPress={() => onPress(title)}
-        >
-          {status === title ? (
-            <View
-              style={{
-                height: 12,
-                width: 12,
-                borderRadius: 999,
-                backgroundColor: '#3894FF',
-              }}
-            />
-          ) : null}
-        </TouchableOpacity>
-        <Text style={{ fontSize: 17 }}>{title}</Text>
+  const fetchDevices = async () => {
+    try {
+      setLoading(true);
+      if (!userToken) {
+        setError('User token is missing. Please log in again.');
+        return;
+      }
+      const allDevices = await getAllDevicesAPI(userToken);
+      // const unTrackedDevices = allDevices.filter(device => device.room_id == undefined);
+      // setDevices(unTrackedDevices);
+      setDevices(allDevices);
+      setError(null);
+    } catch (err) {
+      console.error('Failed to fetch devices:', err);
+      setError('Could not load devices. Please try again.');
+    } finally {
+      setLoading(false);
+    }
+  };
+
+  const handleDeviceSelect = (device : Device) => {
+    router.push({
+      pathname: '/addNew/AddNew',
+      params: { device: JSON.stringify(device) }
+    });
+  };
+
+  const renderDevice = ({ item }: { item: Device }) => (
+    <TouchableOpacity 
+      style={styles.deviceItem}
+      onPress={() => handleDeviceSelect(item)}
+    >
+      <View style={styles.deviceContent}>
+        <Text style={styles.deviceName}>{item.device_name}</Text>
       </View>
-    )
-  }
-)
-
-const AddNew = () => {
-  const [selectedItem, setSelectedItem] = useState(null)
-  const [modalVisible, setModalVisible] = useState(false)
-  const [newRoomName, setNewRoomName] = useState('')
-  const [selectedTiming, setSelectedTiming] = useState('Auto')
-  const [startTime, setStartTime] = useState('')
-  const [endTime, setEndTime] = useState('')
-  const [repeatDays, setRepeatDays] = useState<string[]>([])
-
-  const handleRepeatToggle = (day: string) => {
-    if (repeatDays.includes(day)) {
-      setRepeatDays(repeatDays.filter((d) => d !== day))
-    } else {
-      setRepeatDays([...repeatDays, day])
-    }
-  }
-
-  const handleSaveRoomName = () => {
-    if (!newRoomName) return
-    const newRoom = {
-      label: newRoomName,
-      value: newRoomName.toLowerCase().replace(/\s/g, '-'),
-    }
-    data.push(newRoom)
-  }
-
-  const handleRadioChange = useCallback((title: string) => {
-    setSelectedTiming(title)
-  }, [])
+      <Text style={styles.arrowIcon}>→</Text>
+    </TouchableOpacity>
+  );
 
   return (
-    <View
-      style={{
-        backgroundColor: 'white',
-        height: '100%',
-        paddingTop: 20,
-        paddingHorizontal: 35,
-      }}
-    >
-      <Text style={{ fontSize: 27, fontWeight: '500' }}>Add new device</Text>
-      <Text style={{ marginTop: 20 }}>Device Name:</Text>
-      <TextInput placeholder="Device Name" style={styles.text_input} />
-      <Text style={{ marginTop: 20 }}>Select Room:</Text>
-      <View
-        style={{
-          flexDirection: 'row',
-          alignItems: 'center',
-          justifyContent: 'center',
-          gap: 10,
-        }}
-      >
-        <Dropdown
-          style={[styles.text_input, { width: '72%' }]}
-          data={data}
-          labelField="label"
-          valueField="value"
-          placeholder="Select Room"
-          value={selectedItem}
-          onChange={(item) => setSelectedItem(item.value)}
-        />
-        <Text>or</Text>
-        <TouchableOpacity onPress={() => setModalVisible(true)}>
-          <Text style={styles.text_create_new_room}>create </Text>
-          <Text style={styles.text_create_new_room}>new room</Text>
-        </TouchableOpacity>
-      </View>
-      <Modal
-        animationType="fade"
-        transparent={true}
-        visible={modalVisible}
-        onRequestClose={() => setModalVisible(!modalVisible)}
-      >
-        <View
-          style={{ flex: 1, justifyContent: 'center', alignItems: 'center' }}
-        >
-          <View style={styles.modalView}>
-            <TextInput
-              style={[styles.text_input, { width: 225 }]}
-              placeholder="New Room Name"
-              value={newRoomName}
-              onChangeText={setNewRoomName}
-            />
-            <View
-              style={{
-                flexDirection: 'row',
-                justifyContent: 'space-between',
-                gap: 15,
-              }}
-            >
-              <TouchableOpacity
-                style={{
-                  width: 100,
-                  backgroundColor: 'white',
-                  padding: 10,
-                  borderWidth: 1,
-                  borderColor: '#3894FF',
-                  borderRadius: 999,
-                  marginTop: 20,
-                }}
-                onPress={() => {
-                  setModalVisible(!modalVisible)
-                }}
-              >
-                <Text
-                  style={{
-                    color: '#3894FF',
-                    fontWeight: '500',
-                    textAlign: 'center',
-                  }}
-                >
-                  Cancel
-                </Text>
-              </TouchableOpacity>
-              <TouchableOpacity
-                style={{
-                  width: 100,
-                  backgroundColor: '#3894FF',
-                  padding: 10,
-                  borderRadius: 999,
-                  marginTop: 20,
-                }}
-                onPress={() => {
-                  handleSaveRoomName()
-                  setModalVisible(!modalVisible)
-                }}
-              >
-                <Text
-                  style={{
-                    color: 'white',
-                    fontWeight: '500',
-                    textAlign: 'center',
-                  }}
-                >
-                  Save
-                </Text>
-              </TouchableOpacity>
-            </View>
+    <SafeAreaView style={styles.container}>
+      <Header title="Add New Device" />
+      
+      <View style={styles.content}>
+        {loading ? (
+          <View style={styles.loadingContainer}>
+            <ActivityIndicator size="large" color="#0000ff" />
+            <Text style={styles.loadingText}>Loading available devices...</Text>
           </View>
-        </View>
-      </Modal>
-
-      <View
-        style={{
-          flexDirection: 'row',
-          justifyContent: 'space-between',
-          alignItems: 'center',
-          marginTop: 20,
-        }}
-      >
-        <Text style={{ fontSize: 17 }}>Timing:</Text>
-        <RadioButon
-          title="Auto"
-          status={selectedTiming}
-          onPress={handleRadioChange}
-        />
-        <RadioButon
-          title="Manual"
-          status={selectedTiming}
-          onPress={handleRadioChange}
-        />
-      </View>
-      <Collapsible
-        style={{ paddingHorizontal: 1 }}
-        collapsed={selectedTiming === 'Auto'}
-        // need more inspection
-      >
-        <Text style={{ marginTop: 5 }}>Start Time:</Text>
-        <TextInput
-          style={styles.text_input}
-          placeholder="hh:mm"
-          value={startTime}
-          onChangeText={setStartTime}
-        />
-        <Text style={{ marginTop: 10 }}>End Time:</Text>
-        <TextInput
-          style={styles.text_input}
-          placeholder="hh:mm"
-          value={endTime}
-          onChangeText={setEndTime}
-        />
-        <Text style={{ marginTop: 10 }}>Repeat on Days:</Text>
-        <View style={styles.daysContainer}>
-          {['Mon', 'Tue', 'Wed', 'Thu', 'Fri', 'Sat', 'Sun'].map((day) => (
-            <TouchableOpacity
-              key={day}
-              style={[
-                styles.dayButton,
-                repeatDays.includes(day) && styles.selectedDay,
-              ]}
-              onPress={() => handleRepeatToggle(day)}
-            >
-              <Text style={repeatDays.includes(day) && { color: 'white' }}>
-                {day}
-              </Text>
+        ) : error ? (
+          <View style={styles.errorContainer}>
+            <Text style={styles.errorText}>{error}</Text>
+            <TouchableOpacity style={styles.retryButton} onPress={fetchDevices}>
+              <Text style={styles.retryText}>Try Again</Text>
             </TouchableOpacity>
-          ))}
-        </View>
-      </Collapsible>
-
-      {/* need onPress prop */}
-      <TouchableOpacity
-        style={{
-          backgroundColor: '#3894FF',
-          padding: 10,
-          borderRadius: 999,
-          marginTop: 25,
-        }}
-      >
-        <View>
-          <Text style={{ fontSize: 18, textAlign: 'center', color: 'white' }}>
-            Confirm
-          </Text>
-        </View>
-      </TouchableOpacity>
-    </View>
-  )
+          </View>
+        ) : (
+          <>
+            <Text style={styles.instructionText}>
+              Select a device to add to your home
+            </Text>
+            <FlatList
+              data={devices}
+              renderItem={renderDevice}
+              keyExtractor={(item) => item.device_id.toString()}
+              contentContainerStyle={styles.listContainer}
+            />
+          </>
+        )}
+      </View>
+    </SafeAreaView>
+  );
 }
 
-export default AddNew
-
 const styles = StyleSheet.create({
-  text_input: {
-    borderWidth: 1,
-    borderColor: 'gray',
-    fontSize: 17,
-    borderRadius: 10,
-    padding: 10,
-    marginTop: 5,
+  container: {
+    flex: 1,
+    backgroundColor: '#fff',
+    paddingHorizontal: 16,
   },
-  text_create_new_room: {
-    textAlign: 'center',
-    color: '#3894FF',
-    fontSize: 14,
-    fontWeight: '500',
+  content: {
+    flex: 1,
+    padding: 16,
   },
-  modalView: {
-    backgroundColor: 'white',
-    borderRadius: 20,
-    padding: 35,
-    alignItems: 'center',
-    shadowColor: '#000',
-    shadowOffset: { width: 0, height: 2 },
-    shadowOpacity: 0.25,
-    shadowRadius: 4,
-    elevation: 5,
-  },
-  daysContainer: {
-    flexDirection: 'row',
-    flexWrap: 'wrap',
+  loadingContainer: {
+    flex: 1,
     justifyContent: 'center',
-    gap: 10,
-    marginTop: 9,
+    alignItems: 'center',
   },
-  dayButton: {
-    borderWidth: 1,
-    borderColor: 'gray',
-    borderRadius: 10,
-    padding: 5,
+  loadingText: {
+    marginTop: 10,
+    fontSize: 16,
+    color: '#666',
   },
-  selectedDay: {
-    backgroundColor: '#3894FF',
-    borderColor: '#3894FF',
+  errorContainer: {
+    flex: 1,
+    justifyContent: 'center',
+    alignItems: 'center',
+    padding: 20,
   },
-})
+  errorText: {
+    fontSize: 16,
+    color: 'red',
+    textAlign: 'center',
+    marginBottom: 20,
+  },
+  retryButton: {
+    backgroundColor: '#2196F3',
+    paddingHorizontal: 20,
+    paddingVertical: 10,
+    borderRadius: 5,
+  },
+  retryText: {
+    color: '#fff',
+    fontSize: 16,
+  },
+  instructionText: {
+    fontSize: 16,
+    color: '#666',
+    marginBottom: 20,
+    textAlign: 'center',
+  },
+  listContainer: {
+    paddingBottom: 20,
+  },
+  deviceItem: {
+    flexDirection: 'row',
+    justifyContent: 'space-between',
+    alignItems: 'center',
+    padding: 16,
+    borderBottomWidth: 1,
+    borderBottomColor: '#eee',
+  },
+  deviceContent: {
+    flex: 1,
+  },
+  deviceName: {
+    fontSize: 18,
+    fontWeight: 'bold',
+    marginBottom: 4,
+  },
+  deviceType: {
+    fontSize: 14,
+    color: '#666',
+  },
+  arrowIcon: {
+    fontSize: 20,
+    color: '#999',
+  },
+});

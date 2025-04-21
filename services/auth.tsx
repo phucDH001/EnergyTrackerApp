@@ -21,9 +21,9 @@ const login = async ({ username, password } : loginPrams) => {
   const data = await response.json()
   const token: string = data.token
   const userData: UserDataSaved = {
-    UserName: data.user.Username,
-    Email: data.user.Email,
-    UserID: data.user.UserID,
+    UserName: data.user.username,
+    Email: data.user.email,
+    UserID: data.user.user_id,
   }
 
   return {token, userData}

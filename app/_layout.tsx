@@ -30,7 +30,7 @@ const RootLayoutNavigator: React.FC = () => {
 
   useEffect(() => {
     if (!isLoading) {
-      if (userToken == null) {
+      if (userToken == '' || userToken == undefined || userToken == null) {
         // Nếu không có token và không phải đang loading, điều hướng đến trang đăng nhập
         if (router.canDismiss()) {
           router.dismissAll()

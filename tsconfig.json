@@ -15,5 +15,5 @@
     "app/tabs/index.tsx",
     "app/tabs/AddNew.tsx",
     "app/tabs/_layout.tsx"
-  ]
+, "types/roomdata.ts"  ]
 }

@@ -6,51 +6,19 @@ import {
   Switch,
   TouchableOpacity,
 } from 'react-native'
-import { useState } from 'react'
+import { useState, useContext } from 'react'
+import { AuthContext } from '@/context/auth'
 import Header from '@/components/Header'
 import DeviceDetail from '@/components/device/deviceDetail'
-import { useRouter } from 'expo-router'
-
-const sample_devides = [
-  {
-    id: 1,
-    name: 'Kitchen Main',
-    turnOnTime: '11:30 AM',
-    turnOffTime: '05:30 PM',
-    maxConsumption: '100 Wh',
-    status: true,
-  },
-  {
-    id: 2,
-    name: 'Kitchen Shelves',
-    turnOnTime: '11:30 AM',
-    turnOffTime: '05:30 PM',
-    maxConsumption: '100 Wh',
-    status: false,
-  },
-  {
-    id: 3,
-    name: 'Back Lights',
-    turnOnTime: '11:30 AM',
-    turnOffTime: '05:30 PM',
-    maxConsumption: '100 Wh',
-    status: false,
-  },
-]
+import { useRouter, useLocalSearchParams } from 'expo-router'
 
 export default function DeviceConfig() {
   const route = useRouter()
-  const [devices, setDevices] = useState(sample_devides)
-
-  const toggleStatus = (index: number) => {
-    const updatedDevices = [...devices]
-    updatedDevices[index].status = !updatedDevices[index].status
-    setDevices(updatedDevices)
-
-    // Cập nhật dữ liệu mới lên backend
-  }
-
-  const handleConsumption = (index: number) => {}
+  const authContextValue = useContext(AuthContext)
+  const { rooms } = authContextValue
+  const { room_id } = useLocalSearchParams()
+  const roomIndex = rooms.findIndex((room) => room.room_id === Number(room_id))
+  const devices = rooms[roomIndex].devices || [] // Lấy danh sách thiết bị trong phòng
 
   return (
     <ScrollView style={styles.container}>
@@ -58,7 +26,7 @@ export default function DeviceConfig() {
       <Header title={'Device Configuration'} />
       <View style={styles.subHeader}>
         <Text style={[styles.subHeaderText, { color: 'black', opacity: 0.6 }]}>
-          Room:
+          Room: {rooms[roomIndex].room_name}
         </Text>
       </View>
 
