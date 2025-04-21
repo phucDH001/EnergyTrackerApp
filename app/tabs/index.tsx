@@ -15,7 +15,7 @@ export default function HomeScreen() {
   // }
 
   const authContextValue = useContext(AuthContext)
-  const { userInfo, rooms } = authContextValue
+  const { userToken, userInfo, rooms } = authContextValue
 
   // Use flatMap to gather all devices into a single array
   const allDevices = useMemo(() => {
@@ -26,7 +26,7 @@ export default function HomeScreen() {
   return (
     <ScrollView style={{ backgroundColor: 'white' }}>
       <Header username={userInfo?.UserName} />
-      <PowerChart />
+      <PowerChart userToken={userToken}/>
       <DeviceList deviceList={allDevices} />
       <View style={styles.separate}></View>
       <QuickActions />

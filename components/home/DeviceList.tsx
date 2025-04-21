@@ -76,7 +76,6 @@ export default function DeviceList({ deviceList }: { deviceList: Device[] }) {
           {deviceList.map((device, index) => (
             <View key={index} style={{ marginHorizontal: 10 }}>
               <View
-                key={index}
                 style={{
                   flexDirection: 'row',
                   justifyContent: 'space-between',
