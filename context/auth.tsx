@@ -15,9 +15,10 @@ import { getRoomsAPI } from '@/services/rooms'
 // Định nghĩa interface cho Context Value
 interface AuthContextProps {
   isLoading: boolean
-  userToken: string | undefined
+  userToken: string
   userInfo: UserDataSaved | undefined // hoặc kiểu dữ liệu cụ thể cho userInfo nếu có
   rooms: Room[] // Hoặc kiểu dữ liệu cụ thể cho rooms nếu có
+  setRooms: React.Dispatch<React.SetStateAction<Room[]>>
   login: (
     token: string,
     userData: UserDataSaved,
@@ -28,9 +29,10 @@ interface AuthContextProps {
 // Tạo Context với kiểu dữ liệu đã định nghĩa hoặc undefined
 const initContextValue: AuthContextProps = {
   isLoading: true,
-  userToken: undefined,
+  userToken: '',
   userInfo: undefined,
   rooms: [],
+  setRooms: () => [],
   login: async () => {
     console.log('fail login of initContextValue')
   },
@@ -44,7 +46,7 @@ export const AuthProvider: React.FC<{ children: ReactNode }> = ({
   children,
 }) => {
   const [isLoading, setIsLoading] = useState<boolean>(true) // Thêm kiểu dữ liệu boolean
-  const [userToken, setUserToken] = useState<string | undefined>(undefined) // Thêm kiểu dữ liệu string | null
+  const [userToken, setUserToken] = useState<string>('') // Thêm kiểu dữ liệu string | null
   const [userInfo, setUserInfo] = useState<UserDataSaved | undefined>(undefined) // Thêm kiểu dữ liệu any | null
   const [rooms, setRooms] = useState<Room[]>([]) // Thêm kiểu dữ liệu RoomData | null
   const router = useRouter()
@@ -72,7 +74,7 @@ export const AuthProvider: React.FC<{ children: ReactNode }> = ({
 
   const logout = async () => {
     setIsLoading(true)
-    setUserToken(undefined)
+    setUserToken('')
     setUserInfo(undefined)
     await SecureStore.deleteItemAsync('userToken')
     setIsLoading(false)
@@ -110,6 +112,7 @@ export const AuthProvider: React.FC<{ children: ReactNode }> = ({
     userToken,
     userInfo,
     rooms,
+    setRooms,
     login,
     logout,
   }
