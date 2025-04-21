@@ -11,6 +11,7 @@ import { UserDataSaved } from '@/types/userdata'
 import { Room } from '@/types/roomdata'
 
 import { getRoomsAPI } from '@/services/rooms'
+import { socket } from '@/utils'
 
 // Định nghĩa interface cho Context Value
 interface AuthContextProps {
@@ -19,10 +20,7 @@ interface AuthContextProps {
   userInfo: UserDataSaved | undefined // hoặc kiểu dữ liệu cụ thể cho userInfo nếu có
   rooms: Room[] // Hoặc kiểu dữ liệu cụ thể cho rooms nếu có
   setRooms: React.Dispatch<React.SetStateAction<Room[]>>
-  login: (
-    token: string,
-    userData: UserDataSaved,
-  ) => Promise<void>
+  login: (token: string, userData: UserDataSaved) => Promise<void>
   logout: () => Promise<void>
 }
 
@@ -51,10 +49,7 @@ export const AuthProvider: React.FC<{ children: ReactNode }> = ({
   const [rooms, setRooms] = useState<Room[]>([]) // Thêm kiểu dữ liệu RoomData | null
   const router = useRouter()
 
-  const login = async (
-    token: string,
-    userData: UserDataSaved,
-  ) => {
+  const login = async (token: string, userData: UserDataSaved) => {
     // Thêm kiểu dữ liệu cho tham số
     setIsLoading(true)
     setUserToken(token)
@@ -106,6 +101,50 @@ export const AuthProvider: React.FC<{ children: ReactNode }> = ({
     isLoggedIn()
   }, [])
 
+  useEffect(() => {
+    if (userInfo && isLoading === false) {
+      console.log('rooms 1', rooms)
+      socket.connect() // Kết nối socket khi đã có token
+      socket.on('connect', () => {
+        console.log('Kết nối socket thành công')
+
+        socket.emit('register', { userId: userInfo.UserID })
+        console.log('Đã gửi register:', { userId: userInfo.UserID })
+      })
+      socket.on('mqtt_data', (data) => {
+        console.log('data', data)
+        const deviceId = data.device_id
+        const value = data.value
+
+        console.log('rooms', rooms)
+        const newRooms = rooms.map((room) => {
+          const updatedDevices = room.devices.map((device) => {
+            if (device.device_id === deviceId) {
+              return { ...device, status: value == 'ON' ? 'On' : 'Off' } // Cập nhật giá trị của thiết bị
+            }
+            return device
+          })
+          return { ...room, devices: updatedDevices } // Cập nhật danh sách thiết bị trong phòng
+        })
+
+        console.log('newRooms', newRooms)
+
+        setRooms(newRooms) // Cập nhật danh sách phòng với giá trị mới
+      })
+
+      socket.on('disconnect', () => {
+        console.log('Kết nối socket đã ngắt')
+      })
+
+      return () => {
+        socket.off('connect')
+        socket.off('mqtt_data')
+        socket.off('disconnect')
+        socket.disconnect() // Ngắt kết nối khi component unmount
+      }
+    }
+  }, [userInfo, isLoading])
+
   const value: AuthContextProps = {
     // Khai báo biến value và gán kiểu AuthContextProps
     isLoading,
@@ -119,7 +158,6 @@ export const AuthProvider: React.FC<{ children: ReactNode }> = ({
 
   return (
     <AuthContext.Provider value={value}>
-      {' '}
       {/* Sử dụng biến value đã định kiểu */}
       {children}
     </AuthContext.Provider>

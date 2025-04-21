@@ -45,7 +45,6 @@ export default function PowerChart({ userToken }: { userToken: string }) {
     setIsLoading(true)
     try {
       const devices = await getConSumpAllDevice(userToken)
-      console.log('devices', devices)
 
       if (devices && devices.length > 0) {
         // deep copy barDataInit to avoid mutating the original data
@@ -73,7 +72,6 @@ export default function PowerChart({ userToken }: { userToken: string }) {
             newBarData[6].value += device.sunday || 0
           }
         })
-        console.log('newBarData', newBarData)
         const { maxValue, sections } = calculateChartScale(newBarData)
         setMaxValue(maxValue)
         setSections(sections)
