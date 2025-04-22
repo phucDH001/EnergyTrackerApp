@@ -1,4 +1,5 @@
-import React, { useState } from 'react'
+import React, { useState, useContext } from 'react'
+import { AuthContext } from '@/context/auth'
 import {
   View,
   Text,
@@ -11,6 +12,7 @@ import SelectDropdown from 'react-native-select-dropdown'
 import Entypo from '@expo/vector-icons/Entypo'
 import { useRouter } from 'expo-router'
 import Header from '@/components/Header'
+import PowerChart from '@/components/home/PowerChart'
 
 const options = ['Days', 'Months', 'Years']
 
@@ -26,6 +28,8 @@ const data = [
 
 const StatsScreen = () => {
   const [selected, setSelected] = useState(null)
+  const authContextValue = useContext(AuthContext)
+  const { userToken } = authContextValue
   const route = useRouter()
 
   return (
@@ -66,21 +70,7 @@ const StatsScreen = () => {
         </View>
       </View>
 
-      {/* Biểu đồ */}
-      <BarChart
-        data={data}
-        barWidth={25}
-        barBorderTopLeftRadius={7}
-        barBorderTopRightRadius={7}
-        dashGap={0}
-        frontColor="#3894FF"
-        yAxisColor="#D3D3D3"
-        xAxisColor="#D3D3D3"
-        spacing={18}
-        noOfSections={6}
-        maxValue={6}
-        height={200}
-      />
+      <PowerChart userToken={userToken}/>
 
       {/* Thống kê chi tiết */}
       <View style={styles.statsBox}>

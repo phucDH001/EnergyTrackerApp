@@ -15,7 +15,7 @@ import { useRouter, useLocalSearchParams } from 'expo-router'
 export default function DeviceConfig() {
   const route = useRouter()
   const authContextValue = useContext(AuthContext)
-  const { rooms } = authContextValue
+  const { rooms, userToken, userInfo } = authContextValue
   const { room_id } = useLocalSearchParams()
   const roomIndex = rooms.findIndex((room) => room.room_id === Number(room_id))
   const devices = rooms[roomIndex].devices || [] // Lấy danh sách thiết bị trong phòng
@@ -36,6 +36,8 @@ export default function DeviceConfig() {
           key={index}
           device={device}
           index={index}
+          userToken={userToken}
+          userInfo={userInfo}
         />
       ))}
     </ScrollView>

@@ -113,23 +113,21 @@ export const AuthProvider: React.FC<{ children: ReactNode }> = ({
       })
       socket.on('mqtt_data', (data) => {
         console.log('data', data)
-        const deviceId = data.device_id
+        const deviceId = data.deviceId
         const value = data.value
 
-        console.log('rooms', rooms)
-        const newRooms = rooms.map((room) => {
-          const updatedDevices = room.devices.map((device) => {
-            if (device.device_id === deviceId) {
-              return { ...device, status: value == 'ON' ? 'On' : 'Off' } // Cập nhật giá trị của thiết bị
-            }
-            return device
+        // Sử dụng functional update để đảm bảo luôn cập nhật trên state mới nhất
+        setRooms((currentRooms) => {
+          return currentRooms.map((room) => {
+            const updatedDevices = room.devices.map((device) => {
+              if (device.device_id == deviceId) {
+                return { ...device, status: value } // Cập nhật trạng thái thiết bị
+              }
+              return device
+            })
+            return { ...room, devices: updatedDevices }
           })
-          return { ...room, devices: updatedDevices } // Cập nhật danh sách thiết bị trong phòng
         })
-
-        console.log('newRooms', newRooms)
-
-        setRooms(newRooms) // Cập nhật danh sách phòng với giá trị mới
       })
 
       socket.on('disconnect', () => {

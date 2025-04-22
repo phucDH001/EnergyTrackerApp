@@ -7,8 +7,15 @@ import DetailButton from '../detailButton'
 import StatusSwitch from '../statusSwitch'
 import { Href } from 'expo-router'
 import { Device } from '@/types/roomdata'
+import { UserDataSaved } from '@/types/userdata'
 
-export default function DeviceList({ deviceList }: { deviceList: Device[] }) {
+interface DeviceListProps {
+  deviceList: Device[]
+  userToken: string
+  userInfo: UserDataSaved | undefined
+}
+
+export default function DeviceList({ deviceList, userInfo, userToken }: DeviceListProps) {
   const [isCollapsed, setIsCollapsed] = useState(true)
   const route = useRouter()
 
@@ -91,7 +98,12 @@ export default function DeviceList({ deviceList }: { deviceList: Device[] }) {
                 >
                   {device.device_name}
                 </Text>
-                <StatusSwitch status={device.status == 'On'} />
+                <StatusSwitch
+                  status={device.status}
+                  userId={userInfo?.UserID}
+                  deviceId={device.device_id}
+                  userToken={userToken}
+                />
               </View>
             </View>
           ))}

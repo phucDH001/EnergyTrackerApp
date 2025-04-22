@@ -27,7 +27,7 @@ export default function HomeScreen() {
     <ScrollView style={{ backgroundColor: 'white' }}>
       <Header username={userInfo?.UserName} />
       <PowerChart userToken={userToken}/>
-      <DeviceList deviceList={allDevices} />
+      <DeviceList deviceList={allDevices} userToken={userToken} userInfo={userInfo}/>
       <View style={styles.separate}></View>
       <QuickActions />
       <View style={styles.separate}></View>

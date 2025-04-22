@@ -3,18 +3,32 @@ import { View, Text, StyleSheet } from 'react-native'
 import DetailButton from '@/components/detailButton'
 import DeviceOnOff from './deviceOnOff'
 import { Room as RoomType } from '@/types/roomdata'
+import { UserDataSaved } from '@/types/userdata'
 
-const Room: React.FC<{ room: RoomType }> = ({ room } ) => {
+interface RoomProps {
+  room: RoomType
+  userToken: string
+  userInfo: UserDataSaved | undefined
+}
+
+const Room: React.FC<RoomProps> = ({ room, userInfo, userToken }) => {
   return (
     <View key={room.room_id} style={styles.roomContainer}>
       <View style={styles.roomHeader}>
         <Text style={styles.roomName}>{room.room_name}</Text>
-        <DetailButton directory={'./deviceConfig'} params={{room_id: room.room_id}}/>
+        <DetailButton
+          directory={'./deviceConfig'}
+          params={{ room_id: room.room_id }}
+        />
       </View>
       <View style={styles.divider} />
       <View style={styles.roomDevice}>
         {room.devices.map((device) => (
-          <DeviceOnOff device={device} />
+          <DeviceOnOff
+            device={device}
+            userToken={userToken}
+            userInfo={userInfo}
+          />
         ))}
       </View>
     </View>

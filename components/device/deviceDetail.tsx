@@ -3,15 +3,18 @@ import DetailButton from '../detailButton'
 import StatusSwitch from '../statusSwitch'
 
 import { Device } from '@/types/roomdata'
+import { UserDataSaved } from '@/types/userdata'
 
 import React, { useState } from 'react'
 
 interface DeviceDetailProps {
   device: Device
   index: number
+  userToken: string
+  userInfo: UserDataSaved | undefined
 }
 
-const DeviceDetail = ({ device, index } : DeviceDetailProps) => {
+const DeviceDetail = ({ device, index, userToken, userInfo }: DeviceDetailProps) => {
   const [isLoadingTurnOnOff, setIsLoadingTurnOnOff] = useState(false)
 
   return (
@@ -24,7 +27,12 @@ const DeviceDetail = ({ device, index } : DeviceDetailProps) => {
       <View style={styles.roomDevice}>
         <View style={styles.alignTextRow}>
           <Text style={styles.fieldName}>On/Off</Text>
-          <StatusSwitch status={device.status == 'On'} />
+          <StatusSwitch
+            status={device.status}
+            userId={userInfo?.UserID}
+            deviceId={device.device_id}
+            userToken={userToken}
+          />
         </View>
         <View style={styles.alignTextRow}>
           <Text style={styles.fieldName}>Turn on time</Text>
