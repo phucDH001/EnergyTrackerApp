@@ -48,8 +48,8 @@ export default function RunningStaus({ rooms }: { rooms: Room[] }) {
           <RoomStatusCard
             key={index}
             title={room.room_name}
-            active={room.devices?.filter(device => device.status === 'On').length || 0}
-            inactive={room.devices?.filter(device => device.status === 'Off').length || 0}
+            active={room.devices?.filter(device => device.status === 'ON').length || 0}
+            inactive={room.devices?.filter(device => device.status === 'OFF').length || 0}
             bgColor={colors[index % colors.length]}
           />
         ))}

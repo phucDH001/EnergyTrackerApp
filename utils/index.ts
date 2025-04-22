@@ -1,7 +1,8 @@
 // filepath: d:\Microsoft VSCode repos\EnergyTrackerApp\utils\index.ts
 import { io } from "socket.io-client";
 
-export const socket = io("http://192.168.1.14:3000", {
+// export const socket = io(`${process.env.EXPO_PUBLIC_BE_URL_LOCAL}`, {
+export const socket = io(`${process.env.EXPO_PUBLIC_BE_URL_LOCAL}`, {
   transports: ['websocket'],
   reconnectionAttempts: 15,
   reconnectionDelay: 500,

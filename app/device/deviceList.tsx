@@ -14,7 +14,7 @@ import Room from '@/components/device/room'
 export default function DeviceList() {
   const route = useRouter()
   const authContextValue = useContext(AuthContext)
-  const { rooms } = authContextValue
+  const { userInfo, userToken, rooms } = authContextValue
 
   return (
     <ScrollView style={styles.container}>
@@ -29,7 +29,7 @@ export default function DeviceList() {
 
       {/* room */}
       {rooms.map((room, index) => (
-        <Room key={index} room={room} />
+        <Room key={index} room={room} userToken={userToken} userInfo={userInfo}/>
       ))}
     </ScrollView>
   )
