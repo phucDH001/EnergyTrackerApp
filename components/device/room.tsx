@@ -23,8 +23,9 @@ const Room: React.FC<RoomProps> = ({ room, userInfo, userToken }) => {
       </View>
       <View style={styles.divider} />
       <View style={styles.roomDevice}>
-        {room.devices.map((device) => (
+        {room.devices.map((device, index) => (
           <DeviceOnOff
+            key={index}
             device={device}
             userToken={userToken}
             userInfo={userInfo}

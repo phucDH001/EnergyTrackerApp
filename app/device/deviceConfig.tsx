@@ -38,6 +38,7 @@ export default function DeviceConfig() {
           index={index}
           userToken={userToken}
           userInfo={userInfo}
+          room_name={rooms[roomIndex].room_name}
         />
       ))}
     </ScrollView>

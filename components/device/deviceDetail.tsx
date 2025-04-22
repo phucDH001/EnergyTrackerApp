@@ -12,16 +12,17 @@ interface DeviceDetailProps {
   index: number
   userToken: string
   userInfo: UserDataSaved | undefined
+  room_name: string
 }
 
-const DeviceDetail = ({ device, index, userToken, userInfo }: DeviceDetailProps) => {
+const DeviceDetail = ({ device, index, userToken, userInfo, room_name }: DeviceDetailProps) => {
   const [isLoadingTurnOnOff, setIsLoadingTurnOnOff] = useState(false)
 
   return (
     <View key={index} style={styles.deviceContainer}>
       <View style={styles.roomHeader}>
         <Text style={styles.roomName}>{device.device_name}</Text>
-        <DetailButton directory={'./deviceConsumption'} params={device} />
+        <DetailButton directory={'./deviceConsumption'} params={{device: JSON.stringify(device), room_name: room_name}} />
       </View>
       <View style={styles.divider} />
       <View style={styles.roomDevice}>

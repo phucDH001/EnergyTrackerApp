@@ -2,24 +2,38 @@ import { View, Text } from 'react-native'
 import React, { useState, useEffect } from 'react'
 import { BarChart } from 'react-native-gifted-charts'
 import { useRouter } from 'expo-router'
-import { getConSumpAllDevice } from '@/services/conSump'
+import { getConSumpAllDevice, getConSumpOneDevice } from '@/services/conSump'
 
 interface BarDataType {
   value: number
   label: string
 }
 
-const barDataInit : BarDataType[] = [
-  { value: 10, label: 'Mon' },
-  { value: 20, label: 'Tue' },
-  { value: 50, label: 'Wed' },
-  { value: 40, label: 'Thu' },
-  { value: 700, label: 'Fri' },
-  { value: 40, label: 'Sat' },
-  { value: 50, label: 'Sun' },
+interface PowerChartProps {
+  userToken: string
+  homeScreen?: boolean
+  statScreen?: boolean
+  deviceConsumpScreen?: boolean
+  device_id?: number
+}
+
+const barDataInit: BarDataType[] = [
+  { value: 0, label: 'Mon' },
+  { value: 0, label: 'Tue' },
+  { value: 0, label: 'Wed' },
+  { value: 0, label: 'Thu' },
+  { value: 0, label: 'Fri' },
+  { value: 0, label: 'Sat' },
+  { value: 0, label: 'Sun' },
 ]
 
-export default function PowerChart({ userToken }: { userToken: string }) {
+export default function PowerChart({
+  userToken,
+  homeScreen,
+  statScreen,
+  deviceConsumpScreen,
+  device_id,
+}: PowerChartProps) {
   const route = useRouter()
   const [barData, setBarData] = useState(barDataInit)
   const [isLoading, setIsLoading] = useState(false)
@@ -44,38 +58,72 @@ export default function PowerChart({ userToken }: { userToken: string }) {
 
     setIsLoading(true)
     try {
-      const devices = await getConSumpAllDevice(userToken)
+      if (homeScreen || statScreen) {
+        const devices = await getConSumpAllDevice(userToken)
 
-      if (devices && devices.length > 0) {
-        // deep copy barDataInit to avoid mutating the original data
-        const newBarData = JSON.parse(JSON.stringify(barDataInit))
-        devices.forEach((device) => {
+        if (devices && devices.length > 0) {
+          // deep copy barDataInit to avoid mutating the original data
+          const newBarData = JSON.parse(JSON.stringify(barDataInit))
+          devices.forEach((device) => {
+            if (device.monday) {
+              newBarData[0].value += device.monday || 0
+            }
+            if (device.tuesday) {
+              newBarData[1].value += device.tuesday || 0
+            }
+            if (device.wednesday) {
+              newBarData[2].value += device.wednesday || 0
+            }
+            if (device.thursday) {
+              newBarData[3].value += device.thursday || 0
+            }
+            if (device.friday) {
+              newBarData[4].value += device.friday || 0
+            }
+            if (device.saturday) {
+              newBarData[5].value += device.saturday || 0
+            }
+            if (device.sunday) {
+              newBarData[6].value += device.sunday || 0
+            }
+          })
+          const { maxValue, sections } = calculateChartScale(newBarData)
+          setMaxValue(maxValue)
+          setSections(sections)
+          setBarData(newBarData)
+        }
+      } else if (deviceConsumpScreen && device_id) {
+        const device = await getConSumpOneDevice(userToken, device_id)
+
+        if (device) {
+          const newBarData = JSON.parse(JSON.stringify(barDataInit))
           if (device.monday) {
-            newBarData[0].value += device.monday || 0
+            newBarData[0].value = device.monday || 0
           }
           if (device.tuesday) {
-            newBarData[1].value += device.tuesday || 0
+            newBarData[1].value = device.tuesday || 0
           }
           if (device.wednesday) {
-            newBarData[2].value += device.wednesday || 0
+            newBarData[2].value = device.wednesday || 0
           }
           if (device.thursday) {
-            newBarData[3].value += device.thursday || 0
+            newBarData[3].value = device.thursday || 0
           }
           if (device.friday) {
-            newBarData[4].value += device.friday || 0
+            newBarData[4].value = device.friday || 0
           }
           if (device.saturday) {
-            newBarData[5].value += device.saturday || 0
+            newBarData[5].value = device.saturday || 0
           }
           if (device.sunday) {
-            newBarData[6].value += device.sunday || 0
+            newBarData[6].value = device.sunday || 0
           }
-        })
-        const { maxValue, sections } = calculateChartScale(newBarData)
-        setMaxValue(maxValue)
-        setSections(sections)
-        setBarData(newBarData)
+
+          const { maxValue, sections } = calculateChartScale(newBarData)
+          setMaxValue(maxValue)
+          setSections(sections)
+          setBarData(newBarData)
+        }
       }
     } catch (error) {
       console.error('Error fetching consumption data:', error)
@@ -104,10 +152,13 @@ export default function PowerChart({ userToken }: { userToken: string }) {
       return { maxValue: 5000, sections: 5 }
     } else if (maxValue <= 10000) {
       return { maxValue: 10000, sections: 5 }
-    
+    } else if (maxValue <= 20000) {
+      return { maxValue: 20000, sections: 5 }
+    } else if (maxValue <= 50000) {
+      return { maxValue: 50000, sections: 5 }
     } else {
       // Làm tròn lên đến hàng nghìn gần nhất và chia thành 5 phần
-      const roundedMax = Math.ceil(maxValue / 10000) * 10000
+      const roundedMax = Math.ceil(maxValue / 100000) * 100000
       return { maxValue: roundedMax, sections: 5 }
     }
   }
@@ -156,17 +207,19 @@ export default function PowerChart({ userToken }: { userToken: string }) {
           showFractionalValues={true}
           roundToDigits={1}
         />
-        <Text
-          style={{
-            fontSize: 13,
-            color: '#626262',
-            textAlign: 'right',
-            marginTop: 10,
-          }}
-          onPress={() => route.push('/powerChart/PowerChartDetail')}
-        >
-          Show more
-        </Text>
+        {homeScreen ? (
+          <Text
+            style={{
+              fontSize: 13,
+              color: '#626262',
+              textAlign: 'right',
+              marginTop: 10,
+            }}
+            onPress={() => route.push('/powerChart/PowerChartDetail')}
+          >
+            Show more
+          </Text>
+        ) : null}
       </View>
     </View>
   )

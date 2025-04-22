@@ -70,7 +70,7 @@ const StatsScreen = () => {
         </View>
       </View>
 
-      <PowerChart userToken={userToken}/>
+      <PowerChart userToken={userToken} statScreen={true}/>
 
       {/* Thống kê chi tiết */}
       <View style={styles.statsBox}>

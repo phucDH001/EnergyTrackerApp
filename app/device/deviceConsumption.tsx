@@ -1,26 +1,30 @@
 import { View, Text, StyleSheet } from 'react-native'
-import React from 'react'
+import React, { useContext } from 'react'
+import { AuthContext } from '@/context/auth'
 import Header from '@/components/Header'
 import PowerChart from '@/components/home/PowerChart'
 import { useLocalSearchParams } from 'expo-router'
 
 export default function deviceConsumption() {
-  const { deviceName } = useLocalSearchParams()
+  const authContextValue = useContext(AuthContext)
+  const { userToken } = authContextValue
+  const { device, room_name } = useLocalSearchParams()
+  const deviceObj = JSON.parse(device as string) 
   return (
     <View style={styles.container}>
       <Header title={'Device Configuration'} />
       <View style={styles.subHeader}>
         <Text style={[styles.subHeaderText, { color: 'black', opacity: 0.6 }]}>
-          Room:
+          Room: {room_name}
         </Text>
       </View>
       <View style={[styles.subHeader, { paddingTop: 0 }]}>
         <Text style={[styles.subHeaderText, { color: 'black', opacity: 0.6 }]}>
-          Device: {deviceName}
+          Device: {deviceObj.device_name}
         </Text>
       </View>
       <View style={{ marginHorizontal: -16 }}>
-        <PowerChart />
+        <PowerChart userToken={userToken} deviceConsumpScreen={true} device_id={deviceObj.device_id}/>
       </View>
       <View style={styles.statsBox}>
         <Text style={styles.statsText}>This Week</Text>
